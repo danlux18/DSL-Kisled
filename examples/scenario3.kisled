@@ -1,18 +1,12 @@
-button: 0
-led: 1
+sensor button: 1
+actuator led: 2
 
 on:
-	led CONTINUE
-	(button LOW) -> to_off
-
-to_off:
-	(button HIGH) -> off
+	led <= CONTINUE
+	button LOW => off
 
 off:
-	led SILENT
-	(button LOW) -> to_on
+	led <= SILENT
+	button LOW => on
 
-to_on:
-	(button LOW) -> on
-
-init off
+-> off
