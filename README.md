@@ -23,13 +23,13 @@ the actuators off.
 
 ## Backus-Naur Form
 ```lex
-NAME    [a-z][a-zA-Z0-9]*
+NAME    [_a-z][_a-zA-Z0-9]*
 PORT    [0-9]+
 VALUE   [A-Z]+
 ```
 
 ```html
-<app> ::= <declarations states>
+<app> ::= <declarations> <states>
 
 <declarations> ::= <declaration> <declarations> | /* No declaration */ ;
     
@@ -39,7 +39,7 @@ VALUE   [A-Z]+
     
 <state> ::= NAME ':' <stmts>
 
-<stmts> ::= <stmt> <stmts> | /* No statements */ ;
+<stmts> ::= <stmts> <stmt> | /* No statements */ ;
 
 <stmt> ::= <action> | <transition> ;
 
@@ -47,7 +47,7 @@ VALUE   [A-Z]+
 
 <transition> ::= '(' <condition> ')' '->' NAME
 
-<condition> ::= NAME VALUE | <condition> 'OR' NAME VALUE | <condition> 'AND' NAME VALUE
+<condition> ::= NAME VALUE | <condition> 'AND' NAME VALUE
 ```
 
 ## Technological choice
