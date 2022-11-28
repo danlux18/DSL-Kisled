@@ -52,9 +52,11 @@ typedef struct arduino_state State;
 
 // Make a new state named `var` with a list of `actions` and a `transition`
 // `initial` must be one if the state is the initial one
-State *make_state(char *var, Action *actions, Transition *transition, int initial);
+State *make_state(char *var, Action *actions, Transition *transition);
 // Add a state to a list of states
 State *add_state(State *list, State *a);
+// Set initial state
+void set_initial_state(char *var);
 
 
 //

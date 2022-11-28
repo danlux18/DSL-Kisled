@@ -40,7 +40,7 @@ void yyerror(const char *s);
 %type   <brick>         brick bricks
 %%
 
-start:          KAPPL name '{' bricks  states '}'           { emit_code($2, $4, $5); }
+start:          KAPPL name '{' bricks  states init_state '}'           { emit_code($2, $4, $5); }
      ;
 
 bricks:         bricks brick                                { $$ = add_brick($2, $1); }
@@ -56,8 +56,8 @@ states:         states state                                { $$ = add_state($1,
       |         /*empty */                                  { $$ = NULL; }
       ;
 
-state:          name '{' actions  transition '}'            { $$ = make_state($1, $3, $4, 0); }
-      |         INITSTATE name '{' actions  transition '}'  { $$ = make_state($2, $4, $5, 1); }
+state:          name '{' actions  transition '}'            { $$ = make_state($1, $3, $4); /* , 0 */ }
+//      |         INITSTATE name '{' actions  transition '}'  { $$ = make_state($2, $4, $5, 1); }
       ;
 
 
@@ -75,6 +75,9 @@ transition:     name KIS signal RIGHT name                  { $$ = make_transiti
 
 signal:         KHIGH                                       { $$ = 1; }
       |         KLOW                                        { $$ = 0; }
+      ;
+
+init_state:     INITSTATE name                              { set_initial_state($2); }
       ;
 
 name:           IDENT          ;

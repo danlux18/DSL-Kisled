@@ -134,7 +134,7 @@ struct arduino_state {
   struct arduino_state *next;
 };
 
-static State *initial_state = NULL;
+static char *initial_state = NULL;
 
 static int find_state(char *name, State *list) {
   for (State *p = list; p; p = p->next) {
@@ -146,7 +146,7 @@ static int find_state(char *name, State *list) {
 
 // Make a new state named `var` with a list of `actions` and a `transition`
 // `initial` must be one if the state is the initial one
-State *make_state(char *var, Action *actions, Transition *transition, int initial) {
+State *make_state(char *var, Action *actions, Transition *transition) {
   State *p = must_malloc(sizeof(State));
 
   p->lineno     = yylineno;
@@ -154,7 +154,6 @@ State *make_state(char *var, Action *actions, Transition *transition, int initia
   p-> actions   = actions;
   p->transition = transition;
   p->next       = NULL;
-  if (initial) initial_state = p;       // Keep a reference on the initial state
   return p;
 }
 
@@ -167,6 +166,11 @@ State *add_state(State *list, State *s) {
     return list;
   }
   return s;
+}
+
+// Set initial state
+void set_initial_state(char *var) {
+  initial_state = var;
 }
 
 
@@ -248,7 +252,7 @@ static void emit_states(State *list) {
 }
 
 static void emit_loop(void) {
-  fprintf(fout, "void loop() {\n  state_%s();\n}\n", initial_state->name);
+  fprintf(fout, "void loop() {\n  state_%s();\n}\n", initial_state);
 }
 
 
