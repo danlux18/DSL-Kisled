@@ -1,0 +1,27 @@
+buzzer: 0
+led: 1
+button: 2
+
+buzzer_on:
+	buzzer CONTINUE
+	(button LOW) -> to_led_on
+
+to_led_on:
+    (button HIGH) -> led_on
+
+led_on:
+	buzzer SILENT
+	led CONTINUE
+	(button LOW) -> to_off
+
+to_off:
+    (button HIGH) -> off
+
+off:
+	led SILENT
+	(button LOW) -> to_buzzer_on
+
+to_buzzer_on:
+    (button HIGH) -> buzzer_on
+
+init to_buzzer_on

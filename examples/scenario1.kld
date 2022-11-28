@@ -1,0 +1,15 @@
+button: 0
+led: 1
+buzzer: 2
+
+on:
+	led CONTINUE
+	buzzer CONTINUE
+	(button LOW) -> off
+
+off:
+	led SILENT
+	buzzer SILENT
+	(button HIGH) -> on
+
+init off

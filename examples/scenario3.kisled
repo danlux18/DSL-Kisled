@@ -1,0 +1,18 @@
+button: 0
+led: 1
+
+on:
+	led CONTINUE
+	(button LOW) -> to_off
+
+to_off:
+	(button HIGH) -> off
+
+off:
+	led SILENT
+	(button LOW) -> to_on
+
+to_on:
+	(button LOW) -> on
+
+init off
