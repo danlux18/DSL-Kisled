@@ -12,6 +12,10 @@
 "actuator"              return KACTUATOR;
 "HIGH"                  return KHIGH;
 "LOW"                   return KLOW;
+"CONTINUE"              return KCONTINUE;
+"LONG"                  return KLONG;
+"SHORT"                 return KSHORT;
+"SILENT"                return KSILENT;
 "=>"                    return RIGHT;
 "<="                    return LEFT;
 "->"                    return INITSTATE;

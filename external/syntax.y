@@ -29,11 +29,11 @@ void yyerror(const char *s);
 };
 
 %token KSENSOR KACTUATOR LEFT RIGHT INITSTATE
-%token  <name>          IDENT KHIGH KLOW
+%token  <name>          IDENT KHIGH KLOW KCONTINUE KLONG KSHORT KSILENT
 %token  <value>         PORT_NUMBER
 
 %type   <name>          name
-%type   <value>         signal port
+%type   <value>         signal act_signal port
 %type   <transition>    transition
 %type   <action>        action actions
 %type   <state>         state states
@@ -65,7 +65,7 @@ actions:        actions action                              { $$ = add_action($1
        |        error                                       { yyerrok; }
        ;
 
-action:          name LEFT signal                           { $$ = make_action($1, $3); }
+action:          name LEFT act_signal                       { $$ = make_action($1, $3); }
       ;
 
 transition:     name signal RIGHT name                      { $$ = make_transition($1, $2, $4); }
@@ -74,6 +74,12 @@ transition:     name signal RIGHT name                      { $$ = make_transiti
 
 signal:         KHIGH                                       { $$ = 1; }
       |         KLOW                                        { $$ = 0; }
+      ;
+
+act_signal:     KCONTINUE                                   { $$ = 1; }
+      |         KLONG                                       { $$ = 2; }
+      |         KSHORT                                      { $$ = 3; }
+      |         KSILENT                                     { $$ = 0; }
       ;
 
 init_state:     INITSTATE name                              { set_initial_state($2); }
