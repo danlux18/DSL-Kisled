@@ -8,10 +8,8 @@
 %%
 
     /* ==== Keywords ==== */
-"application"           return KAPPL;
 "sensor"                return KSENSOR;
 "actuator"              return KACTUATOR;
-"is"                    return KIS;
 "HIGH"                  return KHIGH;
 "LOW"                   return KLOW;
 "=>"                    return RIGHT;

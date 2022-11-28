@@ -28,7 +28,7 @@ void yyerror(const char *s);
     struct arduino_brick       *brick;
 };
 
-%token KAPPL KSENSOR KACTUATOR KIS LEFT RIGHT INITSTATE
+%token KSENSOR KACTUATOR LEFT RIGHT INITSTATE
 %token  <name>          IDENT KHIGH KLOW
 %token  <value>         PORT_NUMBER
 
@@ -40,7 +40,7 @@ void yyerror(const char *s);
 %type   <brick>         brick bricks
 %%
 
-start:          KAPPL name '{' bricks  states init_state '}'           { emit_code($2, $4, $5); }
+start:          bricks  states init_state                   { emit_code($1, $2); }
      ;
 
 bricks:         bricks brick                                { $$ = add_brick($2, $1); }
@@ -56,8 +56,7 @@ states:         states state                                { $$ = add_state($1,
       |         /*empty */                                  { $$ = NULL; }
       ;
 
-state:          name '{' actions  transition '}'            { $$ = make_state($1, $3, $4); /* , 0 */ }
-//      |         INITSTATE name '{' actions  transition '}'  { $$ = make_state($2, $4, $5, 1); }
+state:          name '{' actions  transition '}'            { $$ = make_state($1, $3, $4); }
       ;
 
 
@@ -69,7 +68,7 @@ actions:        actions action                              { $$ = add_action($1
 action:          name LEFT signal                           { $$ = make_action($1, $3); }
       ;
 
-transition:     name KIS signal RIGHT name                  { $$ = make_transition($1, $3, $5); }
+transition:     name signal RIGHT name                      { $$ = make_transition($1, $2, $4); }
           |     error                                       { yyerrok; }
           ;
 

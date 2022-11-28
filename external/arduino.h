@@ -64,6 +64,6 @@ void set_initial_state(char *var);
 //
 
 /// emit the code for the parsed configuration
-void emit_code(char *appname, Brick *brick_list, State *state_list);
+void emit_code(Brick *brick_list, State *state_list);
 
 #endif // ARDUINO_H
