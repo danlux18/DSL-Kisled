@@ -34,7 +34,7 @@ void yyerror(const char *s);
 
 %type   <name>          name
 %type   <value>         signal act_signal port
-%type   <transition>    transition
+%type   <transition>    transitions transition
 %type   <action>        action actions
 %type   <state>         state states
 %type   <brick>         brick bricks
@@ -56,7 +56,7 @@ states:         states state                                { $$ = add_state($1,
       |         /*empty */                                  { $$ = NULL; }
       ;
 
-state:          name '{' actions  transition '}'            { $$ = make_state($1, $3, $4); }
+state:          name '{' actions  transitions '}'            { $$ = make_state($1, $3, $4); }
       ;
 
 
@@ -66,6 +66,10 @@ actions:        actions action                              { $$ = add_action($1
        ;
 
 action:          name LEFT act_signal                       { $$ = make_action($1, $3); }
+      ;
+
+transitions:      transitions transition                    { $$ = add_transition($1, $2); }
+      |           transition                                { $$ = $1; }
       ;
 
 transition:     name signal RIGHT name                      { $$ = make_transition($1, $2, $4); }

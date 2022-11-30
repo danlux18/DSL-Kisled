@@ -26,13 +26,14 @@ Brick *make_brick(int number, enum port_assignment kind, char *name);
 Brick *add_brick(Brick *b, Brick *list);
 
 //
-// ========== BRICKS ==========
+// ========== TRANSITIONS ==========
 //
 typedef struct arduino_transition Transition;
 
 /// Make a new transition (when `var` is `signal` goto `newstate`
 Transition *make_transition(char *var, int signal, char *newstate);
-
+// Add a transaction to a list of transaction
+Transition *add_transition(Transition *list, Transition *t);
 
 //
 // ========== ACTIONS ==========

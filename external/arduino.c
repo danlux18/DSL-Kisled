@@ -77,6 +77,7 @@ struct arduino_transition {
   char *var_name;
   int sig_value;
   char *newstate;
+  struct arduino_transition *next;
 };
 
 /// Make a new transition (when `var` is `signal` goto `newstate`
@@ -87,7 +88,18 @@ Transition *make_transition(char *var, int signal, char *newstate) {
   p->var_name  = var;
   p->sig_value = signal;
   p->newstate  = newstate;
+  p->next = NULL;
   return p;
+}
+// Add a transaction to a list of transaction
+Transition *add_transition(Transition *list, Transition *t) {
+  if (list) {
+    Transition *tmp = list;
+    while (tmp->next) tmp = tmp->next;
+    tmp->next = t;
+    return list;
+  }
+  return t;
 }
 
 
@@ -232,12 +244,22 @@ static void emit_actions(Action *list) {
     fprintf(fout, "  digitalWrite(%s, %s);\n", p->var_name, p->sig_value ? "HIGH": "LOW");
 }
 
-static void emit_transition(char *current_state, Transition *transition) {
-  fprintf(fout, "  boolean guard =  millis() - time > debounce;\n");
-  fprintf(fout, "  if (digitalRead(%s) == %s && guard) {\n", transition->var_name, transition->sig_value? "HIGH": "LOW");
+static void emit_transition(Transition *transition) {
+  fprintf(fout, " if (digitalRead(%s) == %s && guard) {\n", transition->var_name, transition->sig_value? "HIGH": "LOW");
   fprintf(fout, "    time = millis();\n");
   fprintf(fout, "    state_%s();\n", transition->newstate);
-  fprintf(fout, "  } else {\n");
+}
+
+static void emit_transitions(char *current_state, Transition *list) {
+  fprintf(fout, "  boolean guard =  millis() - time > debounce;\n");
+
+  fprintf(fout, " ");
+  for (Transition *t = list; t; t = t->next) {
+    emit_transition(t);
+    fprintf(fout, "  } else");
+  }
+
+  fprintf(fout, "  {\n");
   fprintf(fout, "    state_%s();\n", current_state);
   fprintf(fout, "  }\n");
 }
@@ -246,7 +268,7 @@ static void emit_states(State *list) {
   for (State *p = list; p; p = p->next) {
     fprintf(fout, "void state_%s() {\n", p->name);
     emit_actions(p->actions);
-    emit_transition(p->name, p->transition);
+    emit_transitions(p->name, p->transition);
     fprintf(fout, "}\n\n");
   }
 }
