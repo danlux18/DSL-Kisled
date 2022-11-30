@@ -26,12 +26,22 @@ Brick *make_brick(int number, enum port_assignment kind, char *name);
 Brick *add_brick(Brick *b, Brick *list);
 
 //
+// ========== CONDITIONS ==========
+//
+typedef struct arduino_condition Condition;
+
+// Make a new condition
+Condition* make_condition(char *var, int signal);
+// Add an new condition to our global condition
+Condition* add_condition(Condition *list, Condition *c);
+
+//
 // ========== TRANSITIONS ==========
 //
 typedef struct arduino_transition Transition;
 
 /// Make a new transition (when `var` is `signal` goto `newstate`
-Transition *make_transition(char *var, int signal, char *newstate);
+Transition *make_transition(Condition *c, char *newstate);
 // Add a transaction to a list of transaction
 Transition *add_transition(Transition *list, Transition *t);
 

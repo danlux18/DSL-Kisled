@@ -26,14 +26,16 @@ void yyerror(const char *s);
     struct arduino_action      *action;
     struct arduino_state       *state;
     struct arduino_brick       *brick;
+    struct arduino_condition   *condition;
 };
 
-%token KSENSOR KACTUATOR LEFT RIGHT INITSTATE
+%token KSENSOR KACTUATOR LEFT RIGHT INITSTATE KAND
 %token  <name>          IDENT KHIGH KLOW KCONTINUE KLONG KSHORT KSILENT
 %token  <value>         PORT_NUMBER
 
 %type   <name>          name
 %type   <value>         signal act_signal port
+%type   <condition>     conditions condition
 %type   <transition>    transitions transition
 %type   <action>        action actions
 %type   <state>         state states
@@ -72,9 +74,17 @@ transitions:      transitions transition                    { $$ = add_transitio
       |           transition                                { $$ = $1; }
       ;
 
-transition:     name signal RIGHT name                      { $$ = make_transition($1, $2, $4); }
+transition:     conditions RIGHT name                      { $$ = make_transition($1, $3); }
           |     error                                       { yyerrok; }
           ;
+
+conditions:     conditions KAND condition                   { $$ = add_condition($1, $3); }
+      |         condition                                   { $$ = $1; }
+      ;
+
+condition:      name signal                                 { $$ = make_condition($1, $2); }
+      |         error                                       { yyerrok; }
+      ;
 
 signal:         KHIGH                                       { $$ = 1; }
       |         KLOW                                        { $$ = 0; }

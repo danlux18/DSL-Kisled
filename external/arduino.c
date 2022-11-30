@@ -72,21 +72,52 @@ Brick *add_brick(Brick *b, Brick *list) {
 // ======================================================================
 //                            T R A N S I T I O N
 // ======================================================================
-struct arduino_transition {
+struct arduino_condition {
   int lineno;
   char *var_name;
   int sig_value;
+  struct arduino_condition* next;
+};
+
+// Make a new condition
+Condition* make_condition(char *var, int signal) {
+  Condition *p = must_malloc(sizeof(Condition));
+
+  p->lineno    = yylineno;
+  p->var_name  = var;
+  p->sig_value = signal;
+  p->next      = NULL;
+
+  return p;
+}
+
+// Add an new condition to our global condition
+Condition* add_condition(Condition *list, Condition *c) {
+  if (list) {
+    Condition *tmp = list;
+    while (tmp->next) tmp = tmp->next;
+    tmp->next = c;
+    return list;
+  }
+  return c;
+}
+
+// ======================================================================
+//                            T R A N S I T I O N
+// ======================================================================
+struct arduino_transition {
+  int lineno;
+  Condition *condition;
   char *newstate;
   struct arduino_transition *next;
 };
 
 /// Make a new transition (when `var` is `signal` goto `newstate`
-Transition *make_transition(char *var, int signal, char *newstate) {
+Transition *make_transition(Condition *c, char *newstate) {
   Transition *p = must_malloc(sizeof(Transition));
 
   p->lineno    = yylineno;
-  p->var_name  = var;
-  p->sig_value = signal;
+  p->condition = c;
   p->newstate  = newstate;
   p->next = NULL;
   return p;
@@ -198,10 +229,20 @@ static void check_actions(Brick *brick_list, Action *list) {
   }
 }
 
+static void check_conditions(Brick *brick_list, Condition *conditions) {
+  for (Condition *c = conditions; c; c = c->next) {
+    if (! find_brick(c->var_name, brick_list)) {
+      error_msg(c->lineno, "undeclared '%s'", c->var_name);
+    }
+  }
+}
+
 static void check_transition(Brick *brick_list, State *state_list, Transition *trans){
   // Verify that the variable is declared
-  if (! find_brick(trans->var_name, brick_list))
-    error_msg(trans->lineno, "undeclared '%s'", trans->var_name);
+  check_conditions(brick_list, trans->condition);
+  // if (! find_brick(trans->var_name, brick_list))
+  //   error_msg(trans->lineno, "undeclared '%s'", trans->var_name);
+
   // Verify that the next state exists
   if (! find_state(trans->newstate, state_list))
     error_msg(trans->lineno, "undeclared state '%s'", trans->newstate);
@@ -244,8 +285,19 @@ static void emit_actions(Action *list) {
     fprintf(fout, "  digitalWrite(%s, %s);\n", p->var_name, p->sig_value ? "HIGH": "LOW");
 }
 
+static void emit_condition(Condition *condition) {
+  for (Condition *c = condition; c; c = c->next) {
+    fprintf(fout, "digitalRead(%s) == %s ", c->var_name, c->sig_value ? "HIGH" : "LOW");
+    if (c->next) {
+      fprintf(fout, "&& ");
+    }
+  }
+}
+
 static void emit_transition(Transition *transition) {
-  fprintf(fout, " if (digitalRead(%s) == %s && guard) {\n", transition->var_name, transition->sig_value? "HIGH": "LOW");
+  fprintf(fout, " if (");
+  emit_condition(transition->condition);
+  fprintf(fout, "&& guard) {\n");
   fprintf(fout, "    time = millis();\n");
   fprintf(fout, "    state_%s();\n", transition->newstate);
 }

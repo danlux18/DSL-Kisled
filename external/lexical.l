@@ -19,6 +19,7 @@
 "=>"                    return RIGHT;
 "<="                    return LEFT;
 "->"                    return INITSTATE;
+"AND"                   return KAND;
 
 
     /* ==== port numbers (as strings) and identifiers */
