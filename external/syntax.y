@@ -90,10 +90,12 @@ signal:         KHIGH                                       { $$ = 1; }
       |         KLOW                                        { $$ = 0; }
       ;
 
-act_signal:     KCONTINUE                                   { $$ = 1; }
-      |         KLONG                                       { $$ = 2; }
-      |         KSHORT                                      { $$ = 3; }
-      |         KSILENT                                     { $$ = 0; }
+      
+
+act_signal:     KCONTINUE                                   { $$ = CONTINUE; }
+      |         KLONG                                       { $$ = LONG; }
+      |         KSHORT                                      { $$ = SHORT; }
+      |         KSILENT                                     { $$ = SILENT; }
       ;
 
 init_state:     INITSTATE name                              { set_initial_state($2); }

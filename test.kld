@@ -1,0 +1,19 @@
+sensor button1: 1
+sensor button2: 2
+actuator led: 3
+actuator buzzer: 4
+
+on {
+    led <= CONTINUE
+    buzzer <= SHORT
+    button1 LOW => off
+    button2 LOW => off
+}
+
+off {
+    led <= SILENT
+    buzzer <= SILENT
+    button1 HIGH AND button2 HIGH => on
+}
+
+-> off

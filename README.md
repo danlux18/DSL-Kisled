@@ -52,5 +52,26 @@ VALUE   [A-Z]+
 
 ## Technological choice
 ### External DSL
+The external DSL was implemented using lex/yacc based on [Éric Gallesio version of arduinoml](https://github.com/mosser/ArduinoML-kernel/tree/master/externals/yacc)
+
+#### Compilation
+```shell
+make -C external
+```
+
+#### Usage
+```shell
+# Compile a file to a file
+./external/arduinoml -o <destion> <src>
+
+# Print the version
+./external/arduinoml -v
+
+# Print the help
+./external/arduinoml -h
+```
+
+It is possible to use the compiler using `./external/arduinoml` with no argument. In that case, the compiler will wait for an input and will print the result
+when the user would have enter a complete program.
 
 ### Embedded DSL

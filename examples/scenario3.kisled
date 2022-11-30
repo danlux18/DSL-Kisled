@@ -3,10 +3,10 @@ actuator led: 2
 
 on:
 	led <= CONTINUE
-	button LOW => off
+	button HIGH => off
 
 off:
 	led <= SILENT
-	button LOW => on
+	button HIGH => on
 
 -> off
