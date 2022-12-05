@@ -30,11 +30,11 @@ void yyerror(const char *s);
 };
 
 %token KSENSOR KACTUATOR LEFT RIGHT INITSTATE KAND KTIMES
-%token  <name>          IDENT KHIGH KLOW KON KLONG KSHORT KOFF
+%token  <name>          IDENT KHIGH KLOW KON KLONG KSHORT KOFF NOTE
 %token  <value>         PORT_NUMBER
 
-%type   <name>          name
-%type   <value>         signal act_signal port
+%type   <name>          name note
+%type   <value>         signal act_signal port times
 %type   <condition>     conditions condition
 %type   <transition>    transitions transition
 %type   <action>        action actions
@@ -67,8 +67,15 @@ actions:        actions action                              { $$ = add_action($1
        |        error                                       { yyerrok; }
        ;
 
-action:          name LEFT act_signal                       { $$ = make_action($1, $3, 1); }
-      |          name LEFT act_signal KTIMES port           { $$ = make_action($1, $3, $5); }
+action:          name LEFT act_signal times note            { $$ = make_action($1, $3, $4, $5); }
+      ;
+
+times:           KTIMES port                                { $$ = $2; }
+      |          /* empty */                                { $$ = 1; }
+      ;
+
+note:           NOTE                                        { $$ = $1; }
+      |         /* empty */                                 { $$ = "HIGH"; }
       ;
 
 transitions:      transitions transition                    { $$ = add_transition($1, $2); }

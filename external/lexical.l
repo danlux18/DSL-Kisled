@@ -25,6 +25,7 @@
 
     /* ==== port numbers (as strings) and identifiers */
 [1-9]|(1[012])          { yylval.value = atoi(yytext); return PORT_NUMBER; }
+[A-G]                   { yylval.value = strdup(yytext); return NOTE; }
 [a-zA-Z][a-zA-Z0-9_]+   { yylval.name  = strdup(yytext); return IDENT; }
 
     /* ==== Spaces and comments ==== */

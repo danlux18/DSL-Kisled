@@ -4,16 +4,51 @@ actuator led: 8
 actuator buzzer: 9
 
 on {
-    led <= ON x 1
-    buzzer <= SHORT x 3
+    led <= ON
+    buzzer <= SHORT x 3 C
     button1 LOW => off
     button2 LOW => off
+}
+
+do {
+    buzzer <= SHORT C
+    button1 HIGH => re
+}
+
+re {
+    buzzer <= SHORT D
+    button1 HIGH => mi
+}
+
+mi {
+    buzzer <= SHORT E
+    button1 HIGH => fa
+}
+
+fa {
+    buzzer <= SHORT F
+    button1 HIGH => sol
+}
+
+sol {
+    buzzer <= SHORT G
+    button1 HIGH => la
+}
+
+la {
+    buzzer <= SHORT A
+    button1 HIGH => si
+}
+
+si {
+    buzzer <= SHORT B
+    button1 HIGH => do
 }
 
 off {
     led <= OFF
     buzzer <= OFF
-    button1 HIGH AND button2 HIGH => on
+    button1 HIGH => do
 }
 
 -> off
