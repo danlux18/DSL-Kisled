@@ -1,7 +1,7 @@
-sensor button1: 1
-sensor button2: 2
-actuator led: 3
-actuator buzzer: 4
+sensor button1: 11
+sensor button2: 10
+actuator led: 8
+actuator buzzer: 9
 
 on {
     led <= CONTINUE

@@ -281,7 +281,8 @@ static void emit_header() {
 
 /// Write the <pre>do_action(int actuator, int act_signal)</pre> function
 static void emit_do_action() {
-  emit("void do_action(int actuator, int act_signal) {\n");
+  emit("void do_action(int actuator, int act_signal, boolean guard) {\n");
+  emit("  if (!guard) return;\n");
   emit("  if (act_signal == SILENT || act_signal == CONTINUE) {\n");
   emit("    digitalWrite(actuator, act_signal);\n");
   emit("  } else {\n");
@@ -312,7 +313,7 @@ char *act_sigs[4] = {"SILENT", "CONTINUE", "SHORT", "LONG"};
 /// Write the actions bounded to a state
 static void emit_actions(Action *list) {
   for (Action *p = list; p; p = p->next)
-    emit("  do_action(%s, %s);\n", p->var_name, act_sigs[p->sig_value]);
+    emit("  do_action(%s, %s, act_guard);\n", p->var_name, act_sigs[p->sig_value]);
 }
 
 /// Write the condition bounded to a transition
@@ -331,7 +332,7 @@ static void emit_transition(Transition *transition) {
   emit_condition(transition->condition);
   emit("&& guard) {\n");
   emit("    time = millis();\n");
-  emit("    state_%s();\n", transition->newstate);
+  emit("    state_%s(true);\n", transition->newstate);
 }
 
 /// Write the transitions bounded to a state
@@ -345,14 +346,14 @@ static void emit_transitions(char *current_state, Transition *list) {
   }
 
   emit("  {\n");
-  emit("    state_%s();\n", current_state);
+  emit("    state_%s(false);\n", current_state);
   emit("  }\n");
 }
 
 /// Write the states of the application
 static void emit_states(State *list) {
   for (State *p = list; p; p = p->next) {
-    emit("void state_%s() {\n", p->name);
+    emit("void state_%s(boolean act_guard) {\n", p->name);
     emit_actions(p->actions);
     emit_transitions(p->name, p->transition);
     emit("}\n\n");
@@ -361,7 +362,7 @@ static void emit_states(State *list) {
 
 /// Write the <pre>loop()</pre> function
 static void emit_loop(void) {
-  emit("void loop() {\n  state_%s();\n}\n", initial_state);
+  emit("void loop() {\n  state_%s(true);\n}\n", initial_state);
 }
 
 

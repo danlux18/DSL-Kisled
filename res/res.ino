@@ -8,10 +8,10 @@
 long time = 0;
 long debounce = 200;
 
-int buzzer = 4;
-int led = 3;
-int button2 = 2;
-int button1 = 1;
+int buzzer = 9;
+int led = 8;
+int button2 = 10;
+int button1 = 11;
 
 void setup() {
   pinMode(buzzer, OUTPUT);
@@ -20,7 +20,8 @@ void setup() {
   pinMode(button1, INPUT);
 }
 
-void do_action(int actuator, int act_signal) {
+void do_action(int actuator, int act_signal, boolean guard) {
+  if (!guard) return;
   if (act_signal == SILENT || act_signal == CONTINUE) {
     digitalWrite(actuator, act_signal);
   } else {
@@ -30,33 +31,33 @@ void do_action(int actuator, int act_signal) {
   }
 }
 
-void state_on() {
-  do_action(led, CONTINUE);
-  do_action(buzzer, SHORT);
+void state_on(boolean act_guard) {
+  do_action(led, CONTINUE, act_guard);
+  do_action(buzzer, SHORT, act_guard);
   boolean guard =  millis() - time > debounce;
   if (digitalRead(button1) == LOW && guard) {
     time = millis();
-    state_off();
+    state_off(true);
   } else if (digitalRead(button2) == LOW && guard) {
     time = millis();
-    state_off();
+    state_off(true);
   } else  {
-    state_on();
+    state_on(false);
   }
 }
 
-void state_off() {
-  do_action(led, SILENT);
-  do_action(buzzer, SILENT);
+void state_off(boolean act_guard) {
+  do_action(led, SILENT, act_guard);
+  do_action(buzzer, SILENT, act_guard);
   boolean guard =  millis() - time > debounce;
   if (digitalRead(button1) == HIGH && digitalRead(button2) == HIGH && guard) {
     time = millis();
-    state_on();
+    state_on(true);
   } else  {
-    state_off();
+    state_off(false);
   }
 }
 
 void loop() {
-  state_off();
+  state_off(true);
 }
