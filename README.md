@@ -52,7 +52,7 @@ PORT    [1-9]|(1[012])
 
 <signal> ::= "HIGH" | "LOW" ;
 
-<act_signal> ::= "CONTINUE | "LONG" | "SHORT" | "SILENT";
+<act_signal> ::= "ON" | "LONG" | "SHORT" | "OFF";
 
 <init_state> ::= "INITSTATE" NAME ;
 ```

@@ -9,10 +9,10 @@
 #ifndef ARDUINO_H
 #define ARDUINO_H
 
-#define SILENT 0
+#define OFF 0
 #define SHORT 2
 #define LONG 3
-#define CONTINUE 1
+#define ON 1
 
 enum port_assignment {sensor, actuator };
 extern char *input_path;      ///< Name of the input path or NULL if stdin

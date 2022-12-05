@@ -1,0 +1,18 @@
+sensor button1: 11
+sensor button2: 10
+actuator led: 8
+actuator buzzer: 9
+
+enter {
+	led <= ON
+    buzzer <= SHORT x3
+    button1 HIGH => exit
+}
+
+exit {
+	led <= OFF
+    buzzer <= LONG
+    button2 HIGH => enter
+}
+
+-> exit

@@ -30,7 +30,7 @@ void yyerror(const char *s);
 };
 
 %token KSENSOR KACTUATOR LEFT RIGHT INITSTATE KAND
-%token  <name>          IDENT KHIGH KLOW KCONTINUE KLONG KSHORT KSILENT
+%token  <name>          IDENT KHIGH KLOW KON KLONG KSHORT KOFF
 %token  <value>         PORT_NUMBER
 
 %type   <name>          name
@@ -92,10 +92,10 @@ signal:         KHIGH                                       { $$ = 1; }
 
       
 
-act_signal:     KCONTINUE                                   { $$ = CONTINUE; }
+act_signal:     KON                                         { $$ = ON; }
       |         KLONG                                       { $$ = LONG; }
       |         KSHORT                                      { $$ = SHORT; }
-      |         KSILENT                                     { $$ = SILENT; }
+      |         KOFF                                        { $$ = OFF; }
       ;
 
 init_state:     INITSTATE name                              { set_initial_state($2); }

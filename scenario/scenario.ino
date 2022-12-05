@@ -31,33 +31,32 @@ void do_action(int actuator, int act_signal, boolean guard) {
   }
 }
 
-void state_on(boolean act_guard) {
+void state_enter_state(boolean act_guard) {
   do_action(led, ON, act_guard);
   do_action(buzzer, SHORT, act_guard);
+  do_action(buzzer, SHORT, act_guard);
+  do_action(buzzer, SHORT, act_guard);
   boolean guard =  millis() - time > debounce;
-  if (digitalRead(button1) == LOW && guard) {
+  if (digitalRead(button1) == HIGH && guard) {
     time = millis();
-    state_off(true);
-  } else if (digitalRead(button2) == LOW && guard) {
-    time = millis();
-    state_off(true);
+    state_exit_state(true);
   } else  {
-    state_on(false);
+    state_enter_state(false);
   }
 }
 
-void state_off(boolean act_guard) {
+void state_exit_state(boolean act_guard) {
   do_action(led, OFF, act_guard);
-  do_action(buzzer, OFF, act_guard);
+  do_action(buzzer, LONG, act_guard);
   boolean guard =  millis() - time > debounce;
-  if (digitalRead(button1) == HIGH && digitalRead(button2) == HIGH && guard) {
+  if (digitalRead(button2) == HIGH && guard) {
     time = millis();
-    state_on(true);
+    state_enter_state(true);
   } else  {
-    state_off(false);
+    state_exit_state(false);
   }
 }
 
 void loop() {
-  state_off(true);
+  state_exit_state(true);
 }
