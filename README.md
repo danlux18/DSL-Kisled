@@ -25,6 +25,7 @@ the actuators off.
 ```lex
 NAME    [a-zA-Z][a-zA-Z0-9_]+
 PORT    [1-9]|(1[012])
+TIMES   [1-9]|(1[012])
 ```
 
 ```html
@@ -40,7 +41,7 @@ PORT    [1-9]|(1[012])
 
 <actions> ::= <actions> <action> | <action> | <error> ;
 
-<action> ::= NAME "<=" <act_signal>
+<action> ::= NAME "<=" <act_signal> | NAME "<=" <act_signal> "x" TIMES
 
 <transitions> ::= <transitions> <transition> | <transition> ;
 

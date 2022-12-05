@@ -29,7 +29,7 @@ void yyerror(const char *s);
     struct arduino_condition   *condition;
 };
 
-%token KSENSOR KACTUATOR LEFT RIGHT INITSTATE KAND
+%token KSENSOR KACTUATOR LEFT RIGHT INITSTATE KAND KTIMES
 %token  <name>          IDENT KHIGH KLOW KON KLONG KSHORT KOFF
 %token  <value>         PORT_NUMBER
 
@@ -67,7 +67,8 @@ actions:        actions action                              { $$ = add_action($1
        |        error                                       { yyerrok; }
        ;
 
-action:          name LEFT act_signal                       { $$ = make_action($1, $3); }
+action:          name LEFT act_signal                       { $$ = make_action($1, $3, 1); }
+      |          name LEFT act_signal KTIMES port           { $$ = make_action($1, $3, $5); }
       ;
 
 transitions:      transitions transition                    { $$ = add_transition($1, $2); }

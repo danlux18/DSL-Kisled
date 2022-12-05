@@ -141,16 +141,18 @@ struct arduino_action {
   int lineno;
   char *var_name;
   int sig_value;
+  int howMany;
   struct arduino_action *next;
 };
 
 // Make a new action (setting `var` to `signal`)
-Action *make_action(char *var, int signal) {
+Action *make_action(char *var, int signal, int howMany) {
   Action *p = must_malloc(sizeof(Action));
 
   p->lineno    = yylineno;
   p->var_name  = var;
   p->sig_value = signal;
+  p->howMany = howMany;
   p->next      = NULL;
   return p;
 }
@@ -223,6 +225,9 @@ void set_initial_state(char *var) {
 
 static void check_actions(Brick *brick_list, Action *list) {
   for (Action *current = list; current; current = current->next) {
+    if ((current->sig_value == ON || current->sig_value == OFF) && current->howMany != 1)
+      error_msg(current->lineno, "ON or OFF action can't be done more than once");
+
     // Verify that the variable used in this action is declared
     if (! find_brick(current->var_name, brick_list))
       error_msg(list->lineno, "undeclared '%s'", current->var_name);
@@ -312,8 +317,13 @@ char *act_sigs[4] = {"OFF", "ON", "SHORT", "LONG"};
 
 /// Write the actions bounded to a state
 static void emit_actions(Action *list) {
-  for (Action *p = list; p; p = p->next)
-    emit("  do_action(%s, %s, act_guard);\n", p->var_name, act_sigs[p->sig_value]);
+  for (Action *p = list; p; p = p->next) {
+    for (int i = 0; i < p->howMany; i++) {
+      emit("  do_action(%s, %s, act_guard);\n", p->var_name, act_sigs[p->sig_value]);
+      if (i != p->howMany - 1)
+        emit("  delay(SHORT);\n");
+    }
+  }
 }
 
 /// Write the condition bounded to a transition

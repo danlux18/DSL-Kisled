@@ -56,7 +56,7 @@ Transition *add_transition(Transition *list, Transition *t);
 typedef struct arduino_action Action;
 
 // Make a new action (setting `var` to `signal`)
-Action *make_action(char *var, int signal);
+Action *make_action(char *var, int signal, int howMany);
 // Add an action to a list of actions
 Action *add_action(Action *list, Action *a);
 

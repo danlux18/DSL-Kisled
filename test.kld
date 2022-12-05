@@ -4,8 +4,8 @@ actuator led: 8
 actuator buzzer: 9
 
 on {
-    led <= ON
-    buzzer <= SHORT
+    led <= ON x 1
+    buzzer <= SHORT x 3
     button1 LOW => off
     button2 LOW => off
 }

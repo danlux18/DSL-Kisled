@@ -12,14 +12,15 @@
 "actuator"              return KACTUATOR;
 "HIGH"                  return KHIGH;
 "LOW"                   return KLOW;
-"ON"              return KON;
+"ON"                    return KON;
 "LONG"                  return KLONG;
 "SHORT"                 return KSHORT;
-"OFF"                return KOFF;
+"OFF"                   return KOFF;
 "=>"                    return RIGHT;
 "<="                    return LEFT;
 "->"                    return INITSTATE;
 "AND"                   return KAND;
+"x"                     return KTIMES;
 
 
     /* ==== port numbers (as strings) and identifiers */

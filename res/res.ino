@@ -34,6 +34,10 @@ void do_action(int actuator, int act_signal, boolean guard) {
 void state_on(boolean act_guard) {
   do_action(led, ON, act_guard);
   do_action(buzzer, SHORT, act_guard);
+  delay(SHORT);
+  do_action(buzzer, SHORT, act_guard);
+  delay(SHORT);
+  do_action(buzzer, SHORT, act_guard);
   boolean guard =  millis() - time > debounce;
   if (digitalRead(button1) == LOW && guard) {
     time = millis();
