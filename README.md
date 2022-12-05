@@ -23,34 +23,62 @@ the actuators off.
 
 ## Backus-Naur Form
 ```lex
-NAME    [a-z][a-zA-Z0-9]*
-PORT    [0-9]+
-VALUE   [A-Z]+
+NAME    [a-zA-Z][a-zA-Z0-9_]+
+PORT    [1-9]|(1[012])
 ```
 
 ```html
-<app> ::= <declarations states>
+<start> ::= <bricks> <states> <init_state> ;
 
-<declarations> ::= <declaration> <declarations> | /* No declaration */ ;
+<bricks> ::= <bricks> <brick> | <error> | /* No declaration */ ;
     
-<declaration> ::= NAME ':' PORT
+<brick> ::= "actuator" NAME ':' PORT | "sensor" NAME ':' PORT ;
 
-<states> ::= <state> <states> | /* No state */ ;
+<states> ::= <states> <state> | /* No state */ ;
     
-<state> ::= NAME ':' <stmts>
+<state> ::= NAME '{' <actions> <transitions> '}'
 
-<stmts> ::= <stmt> <stmts> | /* No statements */ ;
+<actions> ::= <actions> <action> | <action> | <error> ;
 
-<stmt> ::= <action> | <transition> ;
+<action> ::= NAME "<=" <act_signal>
 
-<action> ::= NAME VALUE
+<transitions> ::= <transitions> <transition> | <transition> ;
 
-<transition> ::= '(' <condition> ')' '->' NAME
+<transition> ::= <condition> "=>" NAME | error ;
 
-<condition> ::= NAME VALUE | <condition> 'OR' NAME VALUE | <condition> 'AND' NAME VALUE
+<conditions> ::= <conditions> "AND" <condition> | <condition> ;
+
+<condition> ::= <condition> 'AND' NAME <signal> | NAME <signal> ;
+
+<signal> ::= "HIGH" | "LOW" ;
+
+<act_signal> ::= "CONTINUE | "LONG" | "SHORT" | "SILENT";
+
+<init_state> ::= "INITSTATE" NAME ;
 ```
 
 ## Technological choice
 ### External DSL
+The external DSL was implemented using lex/yacc based on [Éric Gallesio version of arduinoml](https://github.com/mosser/ArduinoML-kernel/tree/master/externals/yacc)
+
+#### Compilation
+```shell
+make -C external
+```
+
+#### Usage
+```shell
+# Compile a file to a file
+./external/arduinoml -o <destion> <src>
+
+# Print the version
+./external/arduinoml -v
+
+# Print the help
+./external/arduinoml -h
+```
+
+It is possible to use the compiler using `./external/arduinoml` with no argument. In that case, the compiler will wait for an input and will print the result
+when the user would have enter a complete program.
 
 ### Embedded DSL

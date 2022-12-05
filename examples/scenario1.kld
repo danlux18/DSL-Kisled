@@ -1,15 +1,15 @@
-button: 0
-led: 1
-buzzer: 2
+sensor button: 1
+actuator led: 2
+actuator buzzer: 3
 
 on:
-	led CONTINUE
-	buzzer CONTINUE
-	(button LOW) -> off
+	led <= CONTINUE
+	buzzer <= CONTINUE
+	button LOW => off
 
 off:
-	led SILENT
-	buzzer SILENT
-	(button HIGH) -> on
+	led <= SILENT
+	buzzer <= SILENT
+	button HIGH => on
 
-init off
+-> off

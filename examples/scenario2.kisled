@@ -1,14 +1,14 @@
-buzzer: 0
-button1: 1
-button2: 2
+actuator buzzer: 1
+sensor button1: 2
+sensor button2: 3
 
 on:
-	buzzer CONTINUE
-	(button1 LOW) -> off
-	(button2 LOW) -> off
+	buzzer <= CONTINUE
+	button1 LOW => off
+	button2 LOW => off
 
 off:
-	buzzer SILENT
-	(button1 HIGH AND button2 HIGH) -> on
+	buzzer <= SILENT
+	button1 HIGH AND button2 HIGH => on
 
-init "off"
+-> "off"
