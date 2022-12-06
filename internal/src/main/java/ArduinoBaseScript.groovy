@@ -7,20 +7,20 @@ abstract class ArduinoBaseScript extends Script {
                 button: { DSLLanguage.ActionnerState button_state, String next_state -> { println(button_state); println next_state }}]*/
     }
 
-    def button(int port) {
-        ((DSLLanguage) this.getBinding().getVariable("lang")).button(port)
+    def sensor(String name, int port) {
+        return ((DSLLanguage) this.getBinding().getVariable("lang")).sensor(name, port)
     }
 
-    def led(int port) {
-        ((DSLLanguage) this.getBinding().getVariable("lang")).led(port)
-    }
-
-    def buzzer(int port) {
-        ((DSLLanguage) this.getBinding().getVariable("lang")).button(port)
+    def actuator(String name, int port) {
+        return ((DSLLanguage) this.getBinding().getVariable("lang")).actuator(name, port)
     }
 
     def init(String state) {
         ((DSLLanguage) this.getBinding().getVariable("lang")).init(state)
+    }
+
+    def methodMissing(String name, args) {
+        ((DSLLanguage) this.getBinding().getVariable("lang")).set(name, args)
     }
 
 }
