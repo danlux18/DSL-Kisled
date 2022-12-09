@@ -1,7 +1,6 @@
-import io.github.mosser.arduinoml.kernel.App
-import io.github.mosser.arduinoml.kernel.behavioral.Transition
-import io.github.mosser.arduinoml.kernel.generator.ToWiring
-import io.github.mosser.arduinoml.kernel.generator.Visitor
+import kernel.App
+import kernel.generator.ToWiring
+import kernel.generator.Visitor
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ImportCustomizer
 
@@ -35,7 +34,6 @@ class ArduinoDSL {
         App app = (App) script.run()
         Visitor codeGenerator = new ToWiring();
         app.accept(codeGenerator);
-        println(Path.of("/").toString())
         Files.writeString(Path.of("").toAbsolutePath().resolve("ScenarioOne.ino"), codeGenerator.getResult().toString(), StandardOpenOption.CREATE, StandardOpenOption.WRITE)
     }
 

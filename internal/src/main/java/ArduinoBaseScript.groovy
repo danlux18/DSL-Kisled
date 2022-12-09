@@ -8,6 +8,8 @@ abstract class ArduinoBaseScript extends Script {
     }
 
     def sensor(String name, int port) {
+//        ArduinoBaseScript.metaClass.properties.add(new MetaProperty() {}) {name { -> println("test2") } }
+        /*ArduinoBaseScript.metaClass."${name}" = {test, test2 -> println("test2") }*/
         return ((DSLLanguage) this.getBinding().getVariable("lang")).sensor(name, port)
     }
 
@@ -20,7 +22,10 @@ abstract class ArduinoBaseScript extends Script {
     }
 
     def methodMissing(String name, args) {
-        ((DSLLanguage) this.getBinding().getVariable("lang")).set(name, args)
+        /*if(name == "button2")
+            [and: { test -> println(test)}]
+        else*/
+        return ((DSLLanguage) this.getBinding().getVariable("lang")).set(name, args)
     }
 
 }

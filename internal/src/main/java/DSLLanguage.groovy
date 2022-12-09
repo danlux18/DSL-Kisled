@@ -1,13 +1,16 @@
-import io.github.mosser.arduinoml.kernel.App
-import io.github.mosser.arduinoml.kernel.behavioral.Action
-import io.github.mosser.arduinoml.kernel.behavioral.State
-import io.github.mosser.arduinoml.kernel.behavioral.Transition
-import io.github.mosser.arduinoml.kernel.structural.Actuator
-import io.github.mosser.arduinoml.kernel.structural.Brick
-import io.github.mosser.arduinoml.kernel.structural.SIGNAL
-import io.github.mosser.arduinoml.kernel.structural.Sensor
+import kernel.App
+import kernel.behavioral.AbstractCondition
+import kernel.behavioral.Action
+import kernel.behavioral.Condition
+import kernel.behavioral.ConditionComposite
+import kernel.behavioral.State
+import kernel.behavioral.Transition
+import kernel.structural.Actuator
+import kernel.structural.Brick
+import kernel.structural.SIGNAL
+import kernel.structural.Sensor
 
-class DSLLanguage {
+public class DSLLanguage {
 
     List<Brick> bricks
     State state
@@ -30,6 +33,8 @@ class DSLLanguage {
     }
 
     def sensor(String name, int port) {
+        TransitionCondition.metaClass."${name}" = {SensorState signal, String state -> ((TransitionCondition) delegate).finishCondition(name, signal.signal, state) }
+//        TransitionCondition.metaClass."${name}" = {test -> println("test3") }
         Sensor button = new Sensor()
         button.setName(name)
         button.setPin(port)
@@ -46,18 +51,39 @@ class DSLLanguage {
     def set(String varName, Object[] args) {
         def brick = this.bricks.find { it.getName() == varName }
         if (brick instanceof Actuator) {
-            Action action = new Action()
-            action.setActuator(brick)
-            action.setValue(((ActionnerState) args[0]).signal)
-            this.state.getActions().add(action)
+           this.addAction(brick, ((ActionnerState) args[0]).signal)
         } else if (brick instanceof Sensor) {
-            Transition transition = new Transition()
-            transition.setSensor(brick)
-            transition.setValue(((SensorState) args[0]).signal)
-            this.state.setTransition(transition)
-            this.transitionWanted.put(this.state, (String) args[1])
+            return this.createCondition(brick, ((SensorState) args[0]).signal, args.drop(1))
         }
     }
+
+    def addAction(Actuator actuator, SIGNAL signal) {
+        Action action = new Action()
+        action.setActuator(actuator)
+        action.setValue(signal)
+        this.state.getActions().add(action)
+    }
+
+    def createCondition(Sensor sensor, SIGNAL signal, Object[] args) {
+        Condition condition = new Condition();
+        condition.setSensor(sensor)
+        condition.setSignal(signal)
+        if(args.length == 0) {
+            return new TransitionCondition(condition, this.bricks.findAll { it instanceof Sensor }.collect {(Sensor) it}, this)
+        } else
+            this.createTransition(condition, args[0] as String)
+    }
+
+    def createTransition(AbstractCondition condition, String stateName) {
+        Transition transition = new Transition()
+        transition.setCondition(condition)
+        this.state.setTransition(transition)
+        this.transitionWanted.put(this.state, stateName)
+    }
+
+   /* def addTransition(Sensor sensor, ) {
+
+    }*/
 
     /*def led(int port) {
         Actuator led = new Actuator()
@@ -114,6 +140,38 @@ println(state)
         SensorState(SIGNAL signal) {
             this.signal = signal;
         }
+    }
+
+    public static class TransitionCondition {
+
+        ConditionComposite composite;
+        List<Sensor> sensors;
+        DSLLanguage dsl;
+
+        public TransitionCondition(Condition condition, List<Sensor> sensors, DSLLanguage dsl) {
+            this.composite = new ConditionComposite()
+            this.composite.addCondition(condition)
+            this.sensors = sensors
+            this.dsl = dsl
+        }
+
+        def and() {
+            return this
+        }
+
+        def addCondition(String sensorName, SIGNAL signal) {
+            Condition condition = new Condition()
+            condition.setSensor(this.sensors.find {it.name == sensorName})
+            condition.setSignal(signal)
+            this.composite.addCondition(condition)
+        }
+
+        def finishCondition(String sensorName, SIGNAL signal, String stateName) {
+            this.addCondition(sensorName, signal)
+
+            this.dsl.createTransition(this.composite, stateName)
+        }
+
     }
 
     /*public static class State {
