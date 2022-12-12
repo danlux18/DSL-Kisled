@@ -2,13 +2,15 @@ actuator buzzer: 1
 sensor button1: 2
 sensor button2: 3
 
-on:
-	buzzer <= CONTINUE
+on {
+	buzzer <= ON
 	button1 LOW => off
 	button2 LOW => off
+}
 
-off:
-	buzzer <= SILENT
+off {
+	buzzer <= OFF
 	button1 HIGH AND button2 HIGH => on
+}
 
--> "off"
+-> off

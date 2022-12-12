@@ -5,7 +5,7 @@ actuator buzzer: 9
 
 enter {
 	led <= ON
-    buzzer <= SHORT x3
+    buzzer <= SHORT x 3
     button1 HIGH => exit
 }
 

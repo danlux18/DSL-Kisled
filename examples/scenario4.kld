@@ -2,17 +2,20 @@ actuator buzzer: 1
 actuator led: 2
 sensor button: 3
 
-buzzer_on:
-	buzzer <= CONTINUE
+buzzer_on {
+	buzzer <= ON
 	button LOW => led_on
+}
 
-led_on:
-	buzzer <= SILENT
-	led <= CONTINUE
+led_on {
+	buzzer <= OFF
+	led <= ON
 	button LOW => off
+}
 
-off:
-	led <= SILENT
+off {
+	led <= OFF
 	button LOW => buzzer_on
+}
 
 -> buzzer_on
