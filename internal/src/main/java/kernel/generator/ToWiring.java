@@ -43,6 +43,9 @@ public class ToWiring extends Visitor<StringBuffer> {
 			w(String.format("long lastDebounceTime = 0;\n"));
 //		}
 		w("\n");
+
+		w("boolean stateExecuted = false;\n\n");
+
 		if (app.getInitial() != null) {
 			w("STATE currentState = " + app.getInitial().getName()+";\n");
 		}
@@ -144,6 +147,7 @@ public class ToWiring extends Visitor<StringBuffer> {
 				transition.getCondition().accept(this);
 				w(String.format(" && bounceGuard) {\n", transitionName));
 				w(String.format("\t\t\t\tlastDebounceTime = millis();\n"));
+				w("\t\t\t\tstateExecuted = false;\n");
 				w("\t\t\t\tcurrentState = " + transition.getNext().getName() + ";\n");
 				w("\t\t\t}\n");
 			} else
@@ -162,22 +166,26 @@ public class ToWiring extends Visitor<StringBuffer> {
 					w(String.format("\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(),action.getValue().getLevel()));
 				}
 				case SHORT -> {
+					w("\t\t\tif(!stateExecuted) {\n");
 					for (int i = 0; i < action.getQuantity(); i++) {
-						w(String.format("\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "HIGH"));
-						w("\t\t\tdelay(1000);\n");
-						w(String.format("\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "LOW"));
+						w(String.format("\t\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "HIGH"));
+						w("\t\t\t\tdelay(1000);\n");
+						w(String.format("\t\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "LOW"));
 						if(i < action.getQuantity() - 1)
-							w("\t\t\tdelay(1000);\n");
+							w("\t\t\t\tdelay(1000);\n");
 					}
+					w("\t\t\t\tstateExecuted = true;\n\t\t\t}\n");
 				}
 				case LONG -> {
+					w("\t\t\tif(!stateExecuted) {\n");
 					for (int i = 0; i < action.getQuantity(); i++) {
-						w(String.format("\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "HIGH"));
-						w("\t\t\tdelay(3000);\n");
-						w(String.format("\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "LOW"));
+						w(String.format("\t\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "HIGH"));
+						w("\t\t\t\tdelay(3000);\n");
+						w(String.format("\t\t\t\tdigitalWrite(%d,%s);\n",action.getActuator().getPin(), "LOW"));
 						if(i < action.getQuantity() - 1)
-							w("\t\t\tdelay(1000);\n");
+							w("\t\t\t\tdelay(1000);\n");
 					}
+					w("\t\t\t\tstateExecuted = true;\n\t\t\t}\n");
 				}
 			}
 		}
