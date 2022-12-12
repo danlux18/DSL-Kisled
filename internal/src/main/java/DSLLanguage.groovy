@@ -28,7 +28,7 @@ public class DSLLanguage {
     }
 
     def sensor(String name, int port) {
-        TransitionCondition.metaClass."${name}" = { SENSOR_SIGNAL signal, String state -> ((TransitionCondition) delegate).finishCondition(name, signal, state) }
+        TransitionCondition.metaClass."${name}" = { SENSOR_SIGNAL signal -> ((TransitionCondition) delegate).addCondition(name, signal) }
 //        TransitionCondition.metaClass."${name}" = {test -> println("test3") }
         Sensor button = new Sensor()
         button.setName(name)
@@ -141,11 +141,10 @@ println(state)
             condition.setSensor(this.sensors.find {it.name == sensorName})
             condition.setSignal(signal)
             this.composite.addCondition(condition)
+            return this
         }
 
-        def finishCondition(String sensorName, SENSOR_SIGNAL signal, String stateName) {
-            this.addCondition(sensorName, signal)
-
+        def to(String stateName) {
             this.dsl.createTransition(this.composite, stateName)
         }
 

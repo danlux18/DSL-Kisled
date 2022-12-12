@@ -6,11 +6,11 @@ actuator "buzzer", 11
 state "short_three"
     led ON
     buzzer SHORT, 3
-    button1 HIGH, "long_one"
+    button1 HIGH to "long_one"
 
 state "long_one"
     led OFF
     buzzer LONG
-    button2 HIGH, "short_three"
+    button2 HIGH to "short_three"
 
 init "short_three"

@@ -5,11 +5,11 @@ actuator "buzzer", 10
 state "on"
     led ON
     buzzer ON
-    button LOW, "off"
+    button LOW to "off"
 
 state "off"
     led OFF
     buzzer OFF
-    button HIGH, "on"
+    button HIGH to "on"
 
 init "off"
