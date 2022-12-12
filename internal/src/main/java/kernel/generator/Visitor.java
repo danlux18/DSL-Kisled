@@ -2,7 +2,7 @@ package kernel.generator;
 
 
 import kernel.App;
-import kernel.behavioral.Condition;
+import kernel.behavioral.SensorCondition;
 import kernel.behavioral.ConditionComposite;
 import kernel.behavioral.Action;
 import kernel.behavioral.State;
@@ -24,7 +24,7 @@ public abstract class Visitor<T> {
 	public abstract void visit(Actuator actuator);
 	public abstract void visit(Sensor sensor);
 
-	public abstract void visit(Condition condition);
+	public abstract void visit(SensorCondition condition);
 	public abstract void visit(ConditionComposite conditions);
 
 

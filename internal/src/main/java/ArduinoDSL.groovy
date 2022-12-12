@@ -1,6 +1,8 @@
 import kernel.App
+import kernel.behavioral.Action
 import kernel.generator.ToWiring
 import kernel.generator.Visitor
+import kernel.structural.SENSOR_SIGNAL
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.control.customizers.ImportCustomizer
 
@@ -19,8 +21,8 @@ class ArduinoDSL {
         this.binding = new ArduinoBinding()
         this.binding.setVariable("lang", new DSLLanguage())
         def importCustomizer = new ImportCustomizer()
-        importCustomizer.addStaticStars(DSLLanguage.SensorState.class.name)
-        importCustomizer.addStaticStars(DSLLanguage.ActionnerState.class.name)
+        importCustomizer.addStaticStars(SENSOR_SIGNAL.class.name)
+        importCustomizer.addStaticStars(Action.ACTUATOR_SIGNAL.class.name)
         this.config = new CompilerConfiguration()
         config.setScriptBaseClass("ArduinoBaseScript")
         config.addCompilationCustomizers(importCustomizer)
@@ -34,7 +36,7 @@ class ArduinoDSL {
         App app = (App) script.run()
         Visitor codeGenerator = new ToWiring();
         app.accept(codeGenerator);
-        Files.writeString(Path.of("").toAbsolutePath().resolve("ScenarioOne.ino"), codeGenerator.getResult().toString(), StandardOpenOption.CREATE, StandardOpenOption.WRITE)
+        Files.writeString(Path.of("").toAbsolutePath().resolve("ScenarioOne/ScenarioOne.ino"), codeGenerator.getResult().toString(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)
     }
 
 }

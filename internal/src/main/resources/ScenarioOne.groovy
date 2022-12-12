@@ -1,15 +1,15 @@
-sensor "button", 0
-actuator "led", 1
-actuator "buzzer", 2
+sensor "button", 8
+actuator "led", 9
+actuator "buzzer", 10
 
 state "on"
-    led CONTINUE
-    buzzer CONTINUE
+    led ON
+    buzzer ON
     button LOW, "off"
 
 state "off"
-    led SILENT
-    buzzer SILENT
+    led OFF
+    buzzer OFF
     button HIGH, "on"
 
 init "off"

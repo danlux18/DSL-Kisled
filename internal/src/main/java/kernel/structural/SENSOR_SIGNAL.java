@@ -1,6 +1,6 @@
 package kernel.structural;
 
-public enum SIGNAL {
+public enum SENSOR_SIGNAL {
 	HIGH,
 	LOW
 }
