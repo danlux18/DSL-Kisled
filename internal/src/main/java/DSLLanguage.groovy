@@ -46,18 +46,20 @@ public class DSLLanguage {
     def set(String varName, Object[] args) {
         def brick = this.bricks.find { it.getName() == varName }
         if (brick instanceof Actuator) {
-           this.addAction(brick, (Action.ACTUATOR_SIGNAL) args[0], (int) (args.length >= 2 ? args[1] : 1))
+           this.addAction(brick, (Action.ACTUATOR_SIGNAL) args[0])
         } else if (brick instanceof Sensor) {
             return this.createCondition(brick, (SENSOR_SIGNAL) args[0], args.drop(1))
         }
     }
 
-    def addAction(Actuator actuator, Action.ACTUATOR_SIGNAL signal, int quantity) {
+    def addAction(Actuator actuator, Action.ACTUATOR_SIGNAL signal) {
         Action action = new Action()
         action.setActuator(actuator)
         action.setValue(signal)
-        action.setQuantity(quantity)
+//        action.setQuantity(quantity)
         this.state.getActions().add(action)
+        if(signal == Action.ACTUATOR_SIGNAL.SHORT || signal == Action.ACTUATOR_SIGNAL.LONG)
+            return [x: {int quantity -> action.setQuantity(quantity)}]
     }
 
     def createCondition(Sensor sensor, SENSOR_SIGNAL signal, Object[] args) {

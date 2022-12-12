@@ -8,7 +8,7 @@ public class Action implements Visitable {
 
 	private ACTUATOR_SIGNAL value;
 	private Actuator actuator;
-	private int quantity;
+	private int quantity = 1;
 
 
 	public ACTUATOR_SIGNAL getValue() {
