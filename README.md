@@ -37,11 +37,11 @@ TIMES   [1-9]|(1[012])
 
 <states> ::= <states> <state> | /* No state */ ;
     
-<state> ::= NAME '{' <actions> <transitions> '}'
+<state> ::= NAME '{' <actions> <transitions> '}' ;
 
 <actions> ::= <actions> <action> | <action> | <error> ;
 
-<action> ::= NAME "<=" <act_signal> | NAME "<=" <act_signal> "x" TIMES
+<action> ::= NAME "<=" <act_signal> | NAME "<=" <act_signal> "x" TIMES ;
 
 <transitions> ::= <transitions> <transition> | <transition> ;
 
@@ -55,7 +55,7 @@ TIMES   [1-9]|(1[012])
 
 <act_signal> ::= "ON" | "LONG" | "SHORT" | "OFF";
 
-<init_state> ::= "INITSTATE" NAME ;
+<init_state> ::= "->" NAME ;
 ```
 
 ## Technological choice

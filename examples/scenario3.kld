@@ -1,12 +1,14 @@
 sensor button: 1
 actuator led: 2
 
-on:
-	led <= CONTINUE
+on {
+	led <= ON
 	button HIGH => off
+}
 
-off:
-	led <= SILENT
+off {
+	led <= OFF
 	button HIGH => on
+}
 
 -> off
