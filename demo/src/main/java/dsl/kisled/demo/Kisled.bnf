@@ -1,0 +1,45 @@
+{
+  parserClass="dsl.kisled.demo.parser.KisledParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Kisled"
+  psiImplClassSuffix="Impl"
+  psiPackage="dsl.kisled.demo.psi"
+  psiImplPackage="dsl.kisled.demo.psi.impl"
+
+  elementTypeHolderClass="dsl.kisled.demo.psi.KisledTypes"
+  elementTypeClass="dsl.kisled.demo.psi.KisledElementType"
+  tokenTypeClass="dsl.kisled.demo.psi.KisledTokenType"
+
+  psiImplUtilClass="dsl.kisled.demo.psi.impl.KisledPsiImplUtil"
+}
+
+kisledFile ::= (bricks states init_state | COMMENTS) ;
+
+bricks ::= brick bricks | brick ;
+
+brick ::= KACTUATOR NAME? ASSIGN PORT | KSENSOR NAME? ASSIGN PORT;
+
+states ::= state states | state ;
+
+state ::= NAME BLOCK_START actions transitions BLOCK_END ;
+
+actions ::= action actions | action ;
+
+action ::= NAME LEFT act_signal |  NAME LEFT act_signal KTIMES TIMES ;
+
+transitions ::= transition transitions | transition ;
+
+transition ::= conditions RIGHT NAME ;
+
+conditions ::= condition KAND conditions | condition ;
+
+condition ::= NAME signal ;
+
+signal ::= KHIGH | KLOW ;
+
+act_signal ::= KON | KLONG | KSHORT | KOFF ;
+
+init_state ::= INITSTATE NAME ;
+
