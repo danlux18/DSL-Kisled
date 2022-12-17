@@ -1,3 +1,5 @@
+package fr.kisled.intern
+
 class ArduinoBinding extends Binding {
 
     private Script script;

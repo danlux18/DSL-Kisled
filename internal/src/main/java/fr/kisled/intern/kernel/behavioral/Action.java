@@ -1,8 +1,8 @@
-package kernel.behavioral;
+package fr.kisled.intern.kernel.behavioral;
 
-import kernel.generator.Visitable;
-import kernel.generator.Visitor;
-import kernel.structural.Actuator;
+import fr.kisled.intern.kernel.generator.Visitable;
+import fr.kisled.intern.kernel.generator.Visitor;
+import fr.kisled.intern.kernel.structural.Actuator;
 
 public class Action implements Visitable {
 

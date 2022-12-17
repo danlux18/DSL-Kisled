@@ -1,8 +1,8 @@
-package kernel.structural;
+package fr.kisled.intern.kernel.structural;
 
 
-import kernel.NamedElement;
-import kernel.generator.Visitable;
+import fr.kisled.intern.kernel.NamedElement;
+import fr.kisled.intern.kernel.generator.Visitable;
 
 public abstract class Brick implements NamedElement, Visitable {
 

@@ -1,6 +1,6 @@
-package kernel.behavioral;
+package fr.kisled.intern.kernel.behavioral;
 
-import kernel.generator.Visitor;
+import fr.kisled.intern.kernel.generator.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;

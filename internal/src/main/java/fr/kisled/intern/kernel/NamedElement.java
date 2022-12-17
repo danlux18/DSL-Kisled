@@ -1,4 +1,4 @@
-package kernel;
+package fr.kisled.intern.kernel;
 
 
 public interface NamedElement {

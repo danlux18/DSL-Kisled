@@ -1,15 +1,17 @@
+package fr.kisled.intern
+
 abstract class ArduinoBaseScript extends Script {
 
     def state(String name) {
         return ((DSLLanguage) this.getBinding().getVariable("lang")).state(name);
-        /*[led: { DSLLanguage.OutputState led_state -> println(led_state)},
-                buzzer: { DSLLanguage.OutputState buzzer_state -> println(buzzer_state)},
-                button: { DSLLanguage.ActionnerState button_state, String next_state -> { println(button_state); println next_state }}]*/
+        /*[led: { fr.kisled.intern.DSLLanguage.OutputState led_state -> println(led_state)},
+                buzzer: { fr.kisled.intern.DSLLanguage.OutputState buzzer_state -> println(buzzer_state)},
+                button: { fr.kisled.intern.DSLLanguage.ActionnerState button_state, String next_state -> { println(button_state); println next_state }}]*/
     }
 
     def sensor(String name, int port) {
-//        ArduinoBaseScript.metaClass.properties.add(new MetaProperty() {}) {name { -> println("test2") } }
-        /*ArduinoBaseScript.metaClass."${name}" = {test, test2 -> println("test2") }*/
+//        fr.kisled.intern.ArduinoBaseScript.metaClass.properties.add(new MetaProperty() {}) {name { -> println("test2") } }
+        /*fr.kisled.intern.ArduinoBaseScript.metaClass."${name}" = {test, test2 -> println("test2") }*/
         return ((DSLLanguage) this.getBinding().getVariable("lang")).sensor(name, port)
     }
 

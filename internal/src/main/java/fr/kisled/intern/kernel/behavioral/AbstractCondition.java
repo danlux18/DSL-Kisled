@@ -1,7 +1,6 @@
-package kernel.behavioral;
+package fr.kisled.intern.kernel.behavioral;
 
-import kernel.generator.Visitor;
-import kernel.structural.Sensor;
+import fr.kisled.intern.kernel.generator.Visitor;
 
 /**
  * @author CanardNocturne

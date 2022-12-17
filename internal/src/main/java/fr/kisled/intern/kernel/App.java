@@ -1,10 +1,10 @@
-package kernel;
+package fr.kisled.intern.kernel;
 
 
-import kernel.behavioral.State;
-import kernel.generator.Visitable;
-import kernel.generator.Visitor;
-import kernel.structural.Brick;
+import fr.kisled.intern.kernel.behavioral.State;
+import fr.kisled.intern.kernel.generator.Visitable;
+import fr.kisled.intern.kernel.generator.Visitor;
+import fr.kisled.intern.kernel.structural.Brick;
 
 import java.util.ArrayList;
 import java.util.List;

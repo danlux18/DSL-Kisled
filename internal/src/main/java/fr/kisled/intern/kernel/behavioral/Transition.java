@@ -1,9 +1,7 @@
-package kernel.behavioral;
+package fr.kisled.intern.kernel.behavioral;
 
-import kernel.generator.Visitable;
-import kernel.generator.Visitor;
-
-import java.util.List;
+import fr.kisled.intern.kernel.generator.Visitable;
+import fr.kisled.intern.kernel.generator.Visitor;
 
 public class Transition implements Visitable {
 

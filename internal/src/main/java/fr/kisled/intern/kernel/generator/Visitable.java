@@ -1,4 +1,4 @@
-package kernel.generator;
+package fr.kisled.intern.kernel.generator;
 
 public interface Visitable {
 

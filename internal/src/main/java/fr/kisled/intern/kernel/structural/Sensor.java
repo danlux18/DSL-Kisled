@@ -1,6 +1,6 @@
-package kernel.structural;
+package fr.kisled.intern.kernel.structural;
 
-import kernel.generator.Visitor;
+import fr.kisled.intern.kernel.generator.Visitor;
 
 public class Sensor extends Brick {
 	@Override

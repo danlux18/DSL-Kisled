@@ -1,9 +1,11 @@
-import kernel.App
-import kernel.behavioral.*
-import kernel.structural.Actuator
-import kernel.structural.Brick
-import kernel.structural.SENSOR_SIGNAL
-import kernel.structural.Sensor
+package fr.kisled.intern
+
+import fr.kisled.intern.kernel.App
+import fr.kisled.intern.kernel.behavioral.*
+import fr.kisled.intern.kernel.structural.Actuator
+import fr.kisled.intern.kernel.structural.Brick
+import fr.kisled.intern.kernel.structural.SENSOR_SIGNAL
+import fr.kisled.intern.kernel.structural.Sensor
 
 public class DSLLanguage {
 
@@ -28,6 +30,7 @@ public class DSLLanguage {
     }
 
     def sensor(String name, int port) {
+//        Scenario.metaClass."${name}" = { SENSOR_SIGNAL signal -> ((TransitionCondition) delegate).addCondition(name, signal) }
         TransitionCondition.metaClass."${name}" = { SENSOR_SIGNAL signal -> ((TransitionCondition) delegate).addCondition(name, signal) }
 //        TransitionCondition.metaClass."${name}" = {test -> println("test3") }
         Sensor button = new Sensor()

@@ -1,11 +1,11 @@
-package kernel.generator;
+package fr.kisled.intern.kernel.generator;
 
 
-import kernel.App;
-import kernel.behavioral.*;
-import kernel.structural.Actuator;
-import kernel.structural.Brick;
-import kernel.structural.Sensor;
+import fr.kisled.intern.kernel.App;
+import fr.kisled.intern.kernel.behavioral.*;
+import fr.kisled.intern.kernel.structural.Actuator;
+import fr.kisled.intern.kernel.structural.Brick;
+import fr.kisled.intern.kernel.structural.Sensor;
 
 /**
  * Quick and dirty visitor to support the generation of Wiring code
