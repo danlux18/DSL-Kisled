@@ -83,3 +83,25 @@ It is possible to use the compiler using `./external/arduinoml` with no argument
 when the user would have enter a complete program.
 
 ### Embedded DSL
+#### Build the project
+Go to the `internal` folder, then wrote this command
+```shell
+mvn package
+```
+#### The syntax
+| Syntax | Description |
+|--------|-------------|
+|sensor [name], [pin]|Define a sensor named [name] (string) at the pin [pin] (int)|
+|actuator [name], [pin]|Define a actuator named [name] (string) at the pin [pin] (int)|
+|state [name]|Create a state named [name] (string)|
+|[sensor/actuator] ON/OFF|Set the state ON or OFF to the sensor/actuator [name]|
+|[actuator] SHORT/LONG( x [n])|Set the state ON to the actuator [actuator] during a SHORT or LONG time. Optional x: the number of repetitions [n] (int)|
+|[actuator] LOW/HIGH (and() [actuator] LOW/HIGH...] to [state]|Change the state to [state] (string) when the [actuator] is on state LOW or HIGH. Optional and(): add an another actuator state condition.|
+|init [state]|Set the initial state as [state] (string)|
+#### Build the .ino
+Execute:
+```shell
+java -jar target/ArduinoInternalDSL-1.0-with-deps.jar [path to the .groovy dsl]
+```
+#### Examples
+Examples can found at `internal/src/main/resources`
