@@ -20,6 +20,7 @@ the actuators off.
    again after one push, and so on.
 
 ## Semantic diagram
+![Kisled Semantic Diagram](./Kisled%20-%20Projet%20Arduino-Semantic-Diagram.png)
 
 ## Backus-Naur Form
 ```lex
